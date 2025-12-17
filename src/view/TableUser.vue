@@ -1,45 +1,50 @@
 <script setup>
-const props =defineProps({
-    listUser:{
-        type: Array,
-        required: true
-    }
+
+// props: Nhận mảng `listPet` từ app.vue truyền vào để hiển thị danh sách
+const props = defineProps({
+  listPet: {
+    type: Array,
+    required: true
+  }
 });
-const emit = defineEmits('selected-user')
-const userSelected = (userId) =>{
-    let userrow = props.listUser.find(e => e.id === userId);
-    emit('selected-user',{...userrow});
-    
-}
+// emit: khai báo sự kiện 'selected-pet' để báo cho app.vue biết khi người dùng click vào một dòng
+const emit = defineEmits('selected-pet');
+// tìm object pet trong mảng listPet dựa trên id được click
+// gửi event selected-pet kèm data của pet ra ngoài để app.vue update vào form input
+
+const petSelected = (petId) => {
+  const petRow = props.listPet.find((e) => e.id === petId);
+  if (petRow) {
+    emit('selected-pet', { ...petRow });
+  }
+};
 </script>
 
 <template>
-<div class="container">
+  <div class="container">
     <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>UserName</th>
-                <th>Eamil</th>
-                <th>Password</th>
-                <th>Address</th>
-                <th>Gender</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for=" user in props.listUser" :key="user.id" @click="userSelected(user.id)">
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.address }}</td>
-                <td>{{ user.gender == 1 ? "Nu" : "Nam"}}</td>
-                
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>Mã thú cưng</th>
+          <th>Tên thú cưng</th>
+          <th>Loài</th>
+          <th>Tuổi</th>
+          <th>Cân nặng (kg)</th>
+          <th>Đã tiêm chủng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="pet in props.listPet" :key="pet.id"  @click="petSelected(pet.id)">
+          <td>{{ pet.id }}</td>
+          <td>{{ pet.name }}</td>
+          <td>{{ pet.type }}</td>
+          <td>{{ pet.age }}</td>
+          <td>{{ pet.weight }}</td>
+          <td>{{ pet.vaccinated ? 'Đã tiêm' : 'Chưa tiêm' }}</td>
+        </tr>
+      </tbody>
     </table>
-</div>
+  </div>
 </template>
 <style scoped>
-
 </style>
